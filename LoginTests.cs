@@ -31,7 +31,7 @@ namespace SeleniumFramework
             _driver.Manage().Window.Maximize();
             _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(5);
 
-            _loginPage = new LoginPage(_driver);
+            _loginPage = new LoginPage(_driver);            
             _driver.Navigate().GoToUrl(_settingsModel.BaseUrl);
         }
 
@@ -50,6 +50,8 @@ namespace SeleniumFramework
             var dashboardPage = new DashboardPage(_driver);
             dashboardPage.VerifyLoggedUserEmailIs(_settingsModel.Email);
             dashboardPage.VerifyUsernameIs(_settingsModel.Username);
+            
+
         }
 
         [Test]
