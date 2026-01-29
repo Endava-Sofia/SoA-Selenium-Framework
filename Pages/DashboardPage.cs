@@ -3,7 +3,7 @@ using SeleniumFramework.Extensions;
 
 namespace SeleniumFramework.Pages
 {
-    internal class DashboardPage
+    public class DashboardPage
     {
         private readonly IWebDriver _driver;
 

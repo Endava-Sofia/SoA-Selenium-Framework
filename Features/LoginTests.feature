@@ -33,3 +33,18 @@ Examples:
 	| test@abv.bg                |           123456 |
 	| readFromSettings           | readFromSettings |
 	| shouldfailaswell@gmail.com |                  |
+
+
+@E2E
+Scenario: Verify a registered user can be deleted by an admin user and the cannot login afterwards
+	
+	Given I register a new user - RegisterSteps (RegisterPage)
+	And I login with admin credentials (LoginSteps) (LoginPage)
+	And I navigate to the users page (DashboardSteps) (DashboardPage)
+
+	When I delete the created user (UsersSteps) (UsersPage)
+	And I log out successefuly 
+
+	Then I login with the deleted user's credentials
+	And I should still be on the login page
+	And I should see an error message with the following text "Invalid email or password"

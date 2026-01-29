@@ -1,43 +1,26 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using Reqnroll;
 using SeleniumFramework.Models;
 using SeleniumFramework.Pages;
 using SeleniumFramework.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using WebDriverManager;
-using WebDriverManager.DriverConfigs.Impl;
 
 namespace SeleniumFramework.Steps
 {
     [Binding]
     public class LoginSteps
     {
-        private IWebDriver _driver;
-        private LoginPage _loginPage;
+        private readonly IWebDriver _driver;
+        private readonly LoginPage _loginPage;
 
+        private readonly ScenarioContext _context;
         private readonly SettingsModel _settingsModel;
 
-        public LoginSteps(IWebDriver driver, SettingsModel model)
+        public LoginSteps(ScenarioContext context, IWebDriver driver, LoginPage loginPage, SettingsModel model)
         {
+            this._context = context;
             this._driver = driver;
+            this._loginPage = loginPage;
             this._settingsModel = model;
-        }
-
-        [BeforeScenario]
-        public void BeforeScenario()
-        {
-            _loginPage = new LoginPage(_driver);
-        }
-
-        [AfterScenario]
-        public void AfterScenario()
-        {
-            _driver.Quit();
         }
 
         [Given("I navigate to the main page")]

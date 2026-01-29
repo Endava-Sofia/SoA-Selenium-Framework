@@ -1,5 +1,4 @@
-﻿using OpenQA.Selenium;
-using Reqnroll;
+﻿using Reqnroll;
 using SeleniumFramework.Models;
 using SeleniumFramework.Pages;
 
@@ -8,28 +7,26 @@ namespace SeleniumFramework.Steps
     [Binding]
     public class DashboardSteps
     {
-        private readonly IWebDriver _driver;
         private readonly SettingsModel _settingsModel;
+        private readonly DashboardPage _dashboardPage;
 
-        public DashboardSteps(IWebDriver webDriver, SettingsModel model)
+        public DashboardSteps(DashboardPage dashboardPage, SettingsModel model)
         {
-            this._driver = webDriver;
+            this._dashboardPage = dashboardPage;
             this._settingsModel = model;
         }
 
         [Then("I should see the logged user in the main header")]
         public void ThenIShouldSeeTheLoggedUserInTheMainHeader()
         {
-            var dashboardPage = new DashboardPage(_driver);
-            dashboardPage.VerifyLoggedUserEmailIs(_settingsModel.Email);
-            dashboardPage.VerifyUsernameIs(_settingsModel.Username);
+            this._dashboardPage.VerifyLoggedUserEmailIs(_settingsModel.Email);
+            this._dashboardPage.VerifyUsernameIs(_settingsModel.Username);
         }
 
         [Then("I should be able to logout successfully")]
         public void ThenIShouldBeAbleToLogoutSuccessfully()
         {
-            var dashboardPage = new DashboardPage(_driver);
-            dashboardPage.Logout();
+            this._dashboardPage.Logout();
         }
     }
 }

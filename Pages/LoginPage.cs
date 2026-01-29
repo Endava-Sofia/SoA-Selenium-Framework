@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using SeleniumFramework.Extensions;
 
 namespace SeleniumFramework.Pages

@@ -1,4 +1,6 @@
-﻿namespace SeleniumFramework.Utilities
+﻿using OpenQA.Selenium;
+
+namespace SeleniumFramework.Utilities
 {
     public static class Retry
     {
@@ -10,12 +12,18 @@
                 {
                     action.Invoke();
                 }
-                catch (RetryException)
+                catch (Exception e )
                 {
-                    retryNumber--;
-                    Thread.Sleep(waitInMilliseconds);
+                    if (e is RetryException || e is StaleElementReferenceException)
+                    {
 
-                    continue;
+                        retryNumber--;
+                        Thread.Sleep(waitInMilliseconds);
+
+                        continue;
+                    }
+                    else
+                        throw;
                 }
 
                 break;
