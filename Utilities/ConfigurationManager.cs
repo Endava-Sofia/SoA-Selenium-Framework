@@ -14,8 +14,13 @@ namespace SeleniumFramework.Utilities
 
         private ConfigurationManager()
         {
+            var environment = Environment.GetEnvironmentVariable("environment", EnvironmentVariableTarget.User);
+            var configurationFileName = string.IsNullOrEmpty(environment)
+                ? "appsettings.json"
+                : $"appsettings.{environment}.json";
+
             IConfiguration config = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile(configurationFileName, optional: true)
                 .Build();
 
             SettingsModel = config.GetSection("Settings").Get<SettingsModel>()!;

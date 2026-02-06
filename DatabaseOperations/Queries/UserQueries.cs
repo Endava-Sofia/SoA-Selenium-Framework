@@ -6,7 +6,15 @@
         {
             return $@"
                 DELETE FROM users
-                WHERE Email = '{email}';
+                WHERE email = '{email}';
+            ";
+        }
+
+        public static string GetUserIdByEmail(string email)
+        {
+            return $@"
+                SELECT 1 FROM users
+                WHERE email = '{email}';
             ";
         }
     }

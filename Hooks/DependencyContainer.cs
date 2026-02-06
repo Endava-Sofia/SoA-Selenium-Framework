@@ -5,6 +5,8 @@ using OpenQA.Selenium.Chrome;
 using Reqnroll.Microsoft.Extensions.DependencyInjection;
 using SeleniumFramework.DatabaseOperations.Operations;
 using SeleniumFramework.Models;
+using SeleniumFramework.Models.Builders;
+using SeleniumFramework.Models.Factories;
 using SeleniumFramework.Pages;
 using SeleniumFramework.Utilities;
 using System.Data;
@@ -33,6 +35,35 @@ namespace SeleniumFramework.Hooks
                 return driver;
             });
 
+            services.AddSingleton<IUserFactory, UserFactory>();
+            services.AddScoped<UserBuilder>();
+
+            RegisterPages(services);
+            RegisterDatabaseOperations(services);
+
+            return services;
+        }
+
+        private static void RegisterDatabaseOperations(ServiceCollection services)
+        {
+            services.AddScoped<IDbConnection>(sp =>
+            {
+                var settings = sp.GetRequiredService<SettingsModel>();
+                var connectionString = settings.ConnectionString;
+
+                var dbConnection = new MySqlConnection(connectionString);
+                return dbConnection;
+            });
+
+            services.AddScoped(sp =>
+            {
+                var dbConnection = sp.GetRequiredService<IDbConnection>();
+                return new UserOperations(dbConnection);
+            });
+        }
+
+        private static void RegisterPages(ServiceCollection services)
+        {
             services.AddScoped(sp =>
             {
                 var driver = sp.GetRequiredService<IWebDriver>();
@@ -48,30 +79,8 @@ namespace SeleniumFramework.Hooks
             services.AddScoped(sp =>
             {
                 var driver = sp.GetRequiredService<IWebDriver>();
-                return new UsersPage(driver);
-            });
-            services.AddScoped(sp => 
-            {
-                var driver = sp.GetRequiredService<IWebDriver>();
                 return new RegisterPage(driver);
             });
-
-            services.AddScoped<IDbConnection>(sp =>
-            {
-                var settings = sp.GetRequiredService<SettingsModel>();
-                var connectionString = settings.ConnectionString;
-
-                var dbConnection = new MySqlConnection(connectionString);
-                return dbConnection;
-            });
-
-            services.AddScoped(sp =>
-            {
-                var dbConnection = sp.GetRequiredService<IDbConnection>();
-                return new UserOperations(dbConnection);
-            });
-
-            return services;
         }
     }
 }

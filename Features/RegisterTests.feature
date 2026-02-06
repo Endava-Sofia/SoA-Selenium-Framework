@@ -15,3 +15,14 @@ Scenario: User is able to register, super admin can delete the user, and deleted
 	And I should be able to logout successfully
 	And I try to login with deleted user again
 	Then I should an error message with the following text "Invalid email or password"
+
+
+#As a user i would like to be able to register when visiting the page for the first time and to be able to 
+#login with the created credentials.
+
+@DeleteRegisteredUser
+Scenario: Verify user is able to register successfully
+	Given I navigate to the main page
+	And I register new user with valid details
+	Then I should see the created user is logged successfully
+	And I should be able to logout successfully

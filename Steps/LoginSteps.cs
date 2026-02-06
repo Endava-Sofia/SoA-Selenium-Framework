@@ -1,9 +1,11 @@
-﻿using OpenQA.Selenium;
+﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using OpenQA.Selenium;
 using Reqnroll;
 using SeleniumFramework.Models;
+using SeleniumFramework.Models.Builders;
 using SeleniumFramework.Pages;
 using SeleniumFramework.Utilities;
-
+using SeleniumFramework.Utilities.Constants;
 
 namespace SeleniumFramework.Steps
 {
@@ -12,14 +14,14 @@ namespace SeleniumFramework.Steps
     {
         private IWebDriver _driver;
         private LoginPage _loginPage;
-        private ScenarioContext _context;
 
+        private ScenarioContext _context;
         private readonly SettingsModel _settingsModel;
 
-        public LoginSteps(ScenarioContext scenario, IWebDriver driver, LoginPage loginPage, SettingsModel model)
+        public LoginSteps(ScenarioContext context, IWebDriver driver, LoginPage loginPage, SettingsModel model)
         {
             this._driver = driver;
-            this._context = scenario;
+            this._context = context;
             this._loginPage = loginPage;
             this._settingsModel = model;
         }
@@ -36,6 +38,14 @@ namespace SeleniumFramework.Steps
             _loginPage.VerifyTheFormIsVisible();
         }
 
+        [Given("I login with the created user")]
+        [When("I login with the created user")]
+        public void GivenILoginWithTheCreatedUser()
+        {
+            var registeredUser = this._context.Get<UserModel>(ContextConstants.RegisteredUser);
+            this.WhenILoginWithSpecificUser(registeredUser.Email, registeredUser.Password);
+        }
+
         [When("I login with valid credentials")]
         public void WhenILoginWithValidCredentials()
         {
@@ -49,7 +59,7 @@ namespace SeleniumFramework.Steps
         }
 
         [When("I login with {string} and {string}")]
-        public void WhenILoginWithAnd(string email, string password)
+        public void WhenILoginWithSpecificUser(string email, string password)
         {
             if (email == "readFromSettings")
             {

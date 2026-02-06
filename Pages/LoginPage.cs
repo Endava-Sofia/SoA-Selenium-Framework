@@ -1,20 +1,20 @@
 ﻿using OpenQA.Selenium;
+using SeleniumFramework.Utilities.Extensions;
 
 
 namespace SeleniumFramework.Pages
 {
-    public class LoginPage
+    public class LoginPage : BasePage
     {
-        private readonly IWebDriver _driver;
 
         // Elements 
         private IWebElement EmailInput => _driver.FindElement(By.XPath("//input[@type='email']"));
         private IWebElement PasswordInput => _driver.FindElement(By.XPath("//input[@type='password']"));
         private IWebElement SubmitButton => _driver.FindElement(By.XPath("//button[@type='submit' and contains(text(), 'Sign In')]"));
+        private IWebElement RegisterNewUserButton => _driver.FindElement(By.XPath("//a[@href='register.php']"));
 
-        public LoginPage(IWebDriver driver)
+        public LoginPage(IWebDriver driver) : base(driver)
         {
-            this._driver = driver;
         }
 
         public void LoginWith(string email, string password)
@@ -22,6 +22,11 @@ namespace SeleniumFramework.Pages
             this.EmailInput.SendKeys(email);
             this.PasswordInput.SendKeys(password);
             this.SubmitButton.Click();
+        }
+
+        public void ClickRegisterNewUser()
+        {
+            _driver.ScrollToElementAndClick(this.RegisterNewUserButton);
         }
 
         public bool IsPasswordEmpty()

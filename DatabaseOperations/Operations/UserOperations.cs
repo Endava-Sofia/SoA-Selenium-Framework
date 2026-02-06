@@ -20,6 +20,15 @@ namespace SeleniumFramework.DatabaseOperations.Operations
             command.ExecuteNonQuery();
         }
 
+        public bool CheckIfUserExistsByEmail(string email)
+        {
+            var command = this._connection.CreateCommand();
+            command.CommandText = UserQueries.GetUserIdByEmail(email);
+            var result = command.ExecuteScalar();
+
+            return result != null && Convert.ToInt32(result) == 1;
+        }
+
         public void Dispose()
         {
             this._connection?.Close();

@@ -1,14 +1,12 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
-using Reqnroll;
+using SeleniumFramework.Utilities.Extensions;
 using SeleniumFramework.Models;
 
 namespace SeleniumFramework.Pages
 {
-    public class RegisterPage
+    public class RegisterPage : BasePage
     {
-        private readonly IWebDriver _driver;
-
         // Elements
         private IWebElement TitleDropdown => _driver.FindElement(By.XPath("//select[@id='title']"));
         private IWebElement TitleDropdownMr => _driver.FindElement(By.XPath("//option[@value='Mr.']"));
@@ -29,9 +27,21 @@ namespace SeleniumFramework.Pages
         private IWebElement NavBarRegisterButton => _driver.FindElement(By.XPath("//a[contains(@class,'nav-link') and text()='Register']"));
         private IWebElement ErrorFirstNameValidationMessage => _driver.FindElement(By.XPath("//input[@id='first_name']//following-sibling::div[@class='invalid-feedback']"));
 
-        public RegisterPage(IWebDriver driver)
+        public RegisterPage(IWebDriver driver) : base(driver)
         {
-            this._driver = driver;
+        }
+
+        public void RegisterNewUser(UserModel user)
+        {
+            _driver.ScrollToElementAndSendText(FirstNameInput, user.FirstName);
+            _driver.ScrollToElementAndSendText(SurNameInput, user.Surname);
+            _driver.ScrollToElementAndSendText(EmailInput, user.Email);
+            _driver.ScrollToElementAndSendText(PasswordInput, user.Password);
+            _driver.ScrollToElementAndSendText(Country, user.Country);
+            _driver.ScrollToElementAndSendText(City, user.City);
+
+            _driver.ScrollToElementAndClick(RadioTermsButton);
+            _driver.ScrollToElementAndClick(RegisterButton);
         }
 
         public UserModel GetUserInformation()
